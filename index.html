@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Importer et analyser une image</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    h1 {
+      font-size: 36px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    .button {
+      display: inline-block;
+      background-color: #4CAF50;
+      color: white;
+      padding: 15px 30px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 20px;
+    }
+    .button:hover {
+      background-color: #45a049;
+    }
+    #fileInput {
+      display: none;
+    }
+    #previewImageContainer {
+      text-align: center;
+    }
+    #previewImageContainer img {
+      width: 200px;
+      height: auto;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+    #popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #333;
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Importer et analyser une image</h1>
+  <input type="file" id="fileInput" onchange="previewImage()">
+  <label for="fileInput" class="button">Importer une Image</label>
+  <div id="previewImageContainer"></div>
+  <button id="analyzeButton" class="button" style="display: none;" onclick="showPopup()">Analyser</button>
+  <div id="popup">Analyse en cours...</div>
+
+  <script>
+    function previewImage() {
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
+      const imagePreviewContainer = document.getElementById('previewImageContainer');
+      const analyzeButton = document.getElementById('analyzeButton');
+      
+      if(file && file.type.match('image.*')){
+        const reader = new FileReader();
+        
+        reader.addEventListener('load', function (event) {
+          const imageUrl = event.target.result;
+          const image = new Image();
+          
+          image.addEventListener('load', function() {
+            imagePreviewContainer.innerHTML = ''; // Vider le conteneur au cas où il y aurait déjà des images.
+            imagePreviewContainer.appendChild(image);
+            analyzeButton.style.display = 'block'; // Afficher le bouton Analyser
+          });
+          
+          image.src = imageUrl;
+          image.style.width = '200px'; // Indiquez les dimensions souhaitées ici.
+          image.style.height = 'auto'; // Vous pouvez également utiliser "px" si vous voulez spécifier une hauteur.
+        });
+        
+        reader.readAsDataURL(file);
+      } else {
+        imagePreviewContainer.innerHTML = 'Veuillez sélectionner un fichier image valide.';
+      }
+    }
+
+    function showPopup() {
+      const popup = document.getElementById('popup');
+      popup.style.display = 'block';
+      setTimeout(() => {
+        popup.style.display = 'none';
+      }, 2000); // Masquer le pop-up après 2 secondes
+    }
+  </script>
+</body>
+</html>
