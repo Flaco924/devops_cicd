@@ -81,7 +81,7 @@
         
         reader.addEventListener('load', function (event) {
           const imageUrl = event.target.result;
-          const image = new Image(); // comment test deploy
+          const image = new Image();
           
           image.addEventListener('load', function() {
             imagePreviewContainer.innerHTML = ''; // Vider le conteneur au cas où il y aurait déjà des images.
